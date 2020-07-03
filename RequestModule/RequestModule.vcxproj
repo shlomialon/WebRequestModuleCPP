@@ -133,6 +133,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Airwayz.h" />
     <ClInclude Include="asio_compatibility.hpp" />
     <ClInclude Include="client_http.hpp" />
     <ClInclude Include="client_https.hpp" />
@@ -147,6 +148,7 @@
     <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Airwayz.cpp" />
     <ClCompile Include="http_examples.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
