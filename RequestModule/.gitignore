@@ -10,7 +10,8 @@ install_manifest.txt
 Testing
 compile_commands.json
 .usages_clang
-
+boost_1_73_0
+Debug
 *.crt
 *.key
 

@@ -56,8 +56,5 @@
     <ClCompile Include="http_examples.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="https_examples.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

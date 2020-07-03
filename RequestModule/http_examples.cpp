@@ -1,9 +1,6 @@
 #include "client_http.hpp"
 #include "server_http.hpp"
 #include <future>
-
-// Added for the json-example
-#define BOOST_SPIRIT_THREADSAFE
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -24,7 +21,6 @@ using HttpServer = SimpleWeb::Server<SimpleWeb::HTTP>;
 using HttpClient = SimpleWeb::Client<SimpleWeb::HTTP>;
 
 int main() {
-  /*
   // HTTP-server at port 8080 using 1 thread
   // Unless you do more heavy non-threaded processing in the resources,
   // 1 thread is usually faster than several threads
@@ -114,7 +110,7 @@ int main() {
   };
 
   // GET-example simulating heavy work in a separate thread
-  server.resource["^/work$"]["GET"] = [](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request>) {
+  server.resource["^/work$"]["GET"] = [](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> /*request*/) {
     thread work_thread([response] {
       this_thread::sleep_for(chrono::seconds(5));
       response->write("Work done");
@@ -202,11 +198,11 @@ int main() {
     }
   };
 
-  server.on_error = [](shared_ptr<HttpServer::Request> , const SimpleWeb::error_code &) {
+  server.on_error = [](shared_ptr<HttpServer::Request> /*request*/, const SimpleWeb::error_code & /*ec*/) {
     // Handle errors here
     // Note that connection timeouts will also call this handle with ec set to SimpleWeb::errc::operation_canceled
   };
-  
+
   // Start server and receive assigned port when server is listening for requests
   promise<unsigned short> server_port;
   thread server_thread([&server, &server_port]() {
@@ -215,25 +211,25 @@ int main() {
       server_port.set_value(port);
     });
   });
-  cout << "Server listening on port " << server_port.get_future().get() << endl << endl;
-  */
-
+  cout << "Server listening on port " << server_port.get_future().get() << endl
+       << endl;
 
   // Client examples
-  string json_string = "{\"api_key\":\"cw642787609\", \"sid\":\"poc1\", \"drone_id\":\"cw001\", \"token\":\"cw001token\",\"sc\":\"1359\", \"poi\":{\"latitude\":31.279869, \"longitude\": 34.440641, \"altitude\":30.0}}";
+  string json_string = "{\"firstName\": \"John\",\"lastName\": \"Smith\",\"age\": 25}";
 
   // Synchronous request examples
   {
-    HttpClient client("airwayz-euc.appspot.com:80");
+    HttpClient client("localhost:8080");
     try {
-      /*
       cout << "Example GET request to http://localhost:8080/match/123" << endl;
       auto r1 = client.request("GET", "/match/123");
-      cout << "Response content: " << r1->content.rdbuf() << endl << endl; // Alternatively, use the convenience function r1->content.string()
-	  */
-      cout << "Example POST request to airwayz-euc.appspot.com:80" << endl;
-      auto r2 = client.request("POST", "/dcFlyTogether/sendDroneToPoiRequest", json_string);
-      cout << "Response content: " << r2->content.rdbuf() << endl << endl;
+      cout << "Response content: " << r1->content.rdbuf() << endl
+           << endl; // Alternatively, use the convenience function r1->content.string()
+
+      cout << "Example POST request to http://localhost:8080/string" << endl;
+      auto r2 = client.request("POST", "/string", json_string);
+      cout << "Response content: " << r2->content.rdbuf() << endl
+           << endl;
     }
     catch(const SimpleWeb::system_error &e) {
       cerr << "Client request error: " << e.what() << endl;
@@ -251,5 +247,5 @@ int main() {
     client.io_service->run();
   }
 
- // server_thread.join();
+  server_thread.join();
 }
